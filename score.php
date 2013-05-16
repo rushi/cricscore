@@ -7,7 +7,8 @@ $status = NULL;
 while ($do) {
     $matches = makeRequest(getMatchURL());
     //print_r($matches[0]);
-    $m = new Match($matches[0]);
+    $m = new Match($matches[1]);
+    $do = $m->isRunning();
     
     if ($m->getSummary() != $status) {
         $last_ball = $m->lastBall();
@@ -16,8 +17,9 @@ while ($do) {
         echo_debug($m->getSummary());
         echo_debug(json_encode($last_ball) . "\n");
         
+        $sticky = false;
         if ($last_ball->dismissal != '') {
-            $level = 1;
+            $level = 1; $sticky = true;
             $title = $m->getSummary();
             $msg = $last_ball->players . ", OUT! " . $last_ball->dismissal . "\n" . $last_ball->text;
         } else {
@@ -36,9 +38,9 @@ while ($do) {
         }
 
         if (VERBOSE >= $level) {
-            doGrowl($title, $msg);
+            doGrowl($title, $msg, $sticky);
         } elseif ($last_ball->pre_text != '') {
-            doGrowl($m->getSummary(), strip_tags($last_ball->pre_text));
+            doGrowl($m->getSummary(), strip_tags($last_ball->pre_text), $sticky);
         }
         
         $status = $m->getSummary();    
@@ -47,3 +49,6 @@ while ($do) {
     flush();
     sleep(SLEEP_INTERVAL);
 }
+
+echo "I'm done, thank you very much!\n";
+doGrowl("Completed", "Script Completed, match is not running!");
