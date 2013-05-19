@@ -15,6 +15,6 @@ Requests::register_autoloader();
  * 3 = Everything except dot deliveries
  * 4 = Everything, including dot balls
  */
-define('VERBOSE', 3);
+define('VERBOSE', 2);
 
 define('DEBUG', true);

@@ -3,6 +3,11 @@ function getMatchURL() {
     return BASE_URL;
 }
 
+function getScorecardURL($id) {
+    $url = "http://www.espncricinfo.com/scorecard/engine/current/match/$id.html";
+    return $url;
+}
+
 function getCommentaryURL($meta='meta') {
     return $url;
 }
@@ -34,8 +39,8 @@ function doOSXGrowl($title, $msg, $sticky=false) {
     // man growlnotify
     $image_path = BASE_PATH . "/img/cricket.png";
     $s = ($sticky) ? "-s" : "";
-    $cmd = "/usr/local/bin/growlnotify $s --image '$image_path' -n 'Cricket Score' -m \"" . addslashes($msg) . "\" \"$title\"";
-    echo "\n$cmd\n";
+    $cmd = "/usr/local/bin/growlnotify $s --image '$image_path' -n 'Cricket Score' -m \"" . addcslashes($msg,'"') . "\" \"$title\"";
+    echo "\n\t$cmd\n\n";
     exec($cmd);
 }
 

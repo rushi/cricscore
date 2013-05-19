@@ -24,16 +24,20 @@ class Match {
     function getSummary() {
         return $this->matchInfo->current_summary;
     }
+
+    function getScore() {
+        foreach ($this->matchInfo->team as $team) {
+            if ($team->live_current == "1")
+                return $team->score;
+        }
+
+        return null;
+    }
     
     function lastBall() {
         $lb = $this->comms[0];
-        $lb->text = strip_tags(stripslashes(trim($lb->text)));
-
-        if (isset($lb->pre_text)) {
-            $lb->pre_text = strip_tags(stripslashes(trim($lb->pre_text)));
-        } else {
-            $lb->pre_text = NULL;
-        }
+        $lb->text = $this->clean($lb->text);
+        $lb->pre_text = (isset($lb->pre_text)) ? $this->clean($lb->pre_text) : NULL;
 
         return $lb;
     }
@@ -51,14 +55,17 @@ class Match {
         return $runs;
     }
 
-    private function str_to_num($s) {
-        $s = strtolower($s);
+    private function clean($str) {
+        return trim(stripslashes(strip_tags($str)));
+    }
 
-        if (preg_match("/four/", $s))
+    private function str_to_num($s) {
+
+        if (preg_match("/four/i", $s))
             return 4;
-        elseif (preg_match("/five/", $s))
+        elseif (preg_match("/five/i", $s))
             return 5;
-        elseif (preg_match("/six/", $s))
+        elseif (preg_match("/six/i", $s))
             return 6;
 
         return $s;

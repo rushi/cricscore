@@ -7,7 +7,7 @@ $status = NULL;
 while ($do) {
     $matches = makeRequest(getMatchURL());
     //print_r($matches[0]);
-    $m = new Match($matches[1]);
+    $m = new Match($matches[2]);
     $do = $m->isRunning();
     
     if ($m->getSummary() != $status) {
@@ -20,10 +20,10 @@ while ($do) {
         $sticky = false;
         if ($last_ball->dismissal != '') {
             $level = 1; $sticky = true;
-            $title = $m->getSummary();
-            $msg = $last_ball->players . ", OUT! " . $last_ball->dismissal . "\n" . $last_ball->text;
+            $title = $last_ball->players . ", OUT";
+            $msg = $last_ball->dismissal . "\n" . $last_ball->text . "\n";
+            $msg .= $m->getSummary();
         } else {
-            $title = $m->getSummary();
             $msg = $last_ball->players . ", " . $last_ball->event . "\n";
 
             if ($last_ball->pre_text != '') {
@@ -34,7 +34,20 @@ while ($do) {
                 $msg .= $last_ball->text . "\n";
             }
 
-            $level = ($runs >= 4) ? 2 : ($runs >= 1) ? 3 : 4;
+            if ($runs >= 4) {
+                $level = 2;
+            } elseif ($runs >= 1) {
+                $level = 3;
+            } else {
+                $level = 4;
+            }
+
+            if ($runs >= 4) {
+                $title = "SHOT $runs runs - " . $m->getScore();
+                $msg .= "\n" . $m->getSummary() . "\n";
+            } else {
+                $title = $m->getSummary();
+            }
         }
 
         if (VERBOSE >= $level) {
