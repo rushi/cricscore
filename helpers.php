@@ -47,6 +47,7 @@ function doOSXGrowl($title, $msg, $sticky=false) {
 function doUbuntuNS($title, $msg, $sticky=false) {
     // notify-send http://www.thegeekstuff.com/2010/12/ubuntu-notify-send/
     $image_path = BASE_PATH . "/img/cricket.png";
+    $msg = addcslashes($msg, '"');
     $cmd = "notify-send -i '$image_path' \"$title\" \"$msg\"";
     exec($cmd);
 }
