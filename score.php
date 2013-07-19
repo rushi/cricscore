@@ -7,7 +7,7 @@ $status = NULL;
 while ($do) {
     $matches = makeRequest(getMatchURL());
     //print_r($matches[0]);
-    $m = new Match($matches[2]);
+    $m = new Match($matches[0]);
     $do = $m->isRunning();
     
     if ($m->getSummary() != $status) {
