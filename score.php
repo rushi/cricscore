@@ -6,17 +6,20 @@ $do = true;
 $status = NULL;
 while ($do) {
     $matches = makeRequest(getMatchURL());
-    //print_r($matches[0]);
-    $m = new Match($matches[0]);
+    print_r($matches->live);
+    $m = new Match($matches->live);
     $do = $m->isRunning();
-    
+
     if ($m->getSummary() != $status) {
         $last_ball = $m->lastBall();
         $runs = $m->lastRuns();
-        
+
+        if (!DEBUG) {
+          echo ".";
+        }
         echo_debug($m->getSummary());
         echo_debug(json_encode($last_ball) . "\n");
-        
+
         $sticky = false;
         if ($last_ball->dismissal != '') {
             $level = 1; $sticky = true;
@@ -55,10 +58,10 @@ while ($do) {
         } elseif ($last_ball->pre_text != '') {
             doGrowl($m->getSummary(), strip_tags($last_ball->pre_text), $sticky);
         }
-        
-        $status = $m->getSummary();    
+
+        $status = $m->getSummary();
     }
-    
+
     flush();
     sleep(SLEEP_INTERVAL);
 }

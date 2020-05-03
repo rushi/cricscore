@@ -40,7 +40,7 @@ function doOSXGrowl($title, $msg, $sticky=false) {
     $image_path = BASE_PATH . "/img/cricket.png";
     $s = ($sticky) ? "-s" : "";
     $cmd = "/usr/local/bin/growlnotify $s --image '$image_path' -n 'Cricket Score' -m \"" . addcslashes($msg,'"') . "\" \"$title\"";
-    echo "\n\t$cmd\n\n";
+    //echo "\n\t$cmd\n\n";
     exec($cmd);
 }
 
